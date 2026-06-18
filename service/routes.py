@@ -8,6 +8,7 @@ from flask import jsonify, request, make_response, abort, url_for   # noqa; F401
 from service.models import Account
 from service.common import status  # HTTP Status Codes
 from . import app  # Import Flask application
+from service.common.error_handlers import DataValidationError
 
 
 ############################################################
@@ -106,6 +107,22 @@ def get_accounts(account_id):
 ######################################################################
 
 # ... place you code here to UPDATE an account ...
+@app.route("/accounts/<int:account_id>", methods=["PUT"])
+def update_account(account_id: int):
+    check_content_type("application/json")
+    
+    account = Account.find(account_id)
+    if not account:
+        return jsonify({"error": "Account not found"}), status.HTTP_404_NOT_FOUND
+        
+    try:
+        account.deserialize(request.get_json())
+        account.id = account_id
+        account.update()
+    except DataValidationError:
+        return jsonify({"error": "Invalid data provided"}), status.HTTP_400_BAD_REQUEST
+
+    return jsonify(account.serialize()), status.HTTP_200_OK
 
 
 ######################################################################
