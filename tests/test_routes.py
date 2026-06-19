@@ -165,7 +165,7 @@ class TestAccountService(TestCase):
         self.assertEqual(len(response.get_json()), 0)
         # Just to be sure
         self.assertEqual(len(Account.all()), 0)
-    
+
     def test_update_an_account(self):
         """Update: It should Update an Account"""
         account = self._create_accounts(1)[0]
@@ -190,7 +190,7 @@ class TestAccountService(TestCase):
         self.assertEqual(updated_account.address, account.address)
         self.assertEqual(updated_account.phone_number, account.phone_number)
         self.assertEqual(updated_account.date_joined, account.date_joined)
-    
+
     def test_update_account_not_found(self):
         """Update: It should return error status when no account could be found"""
         invalid_account_id = 0
@@ -216,7 +216,7 @@ class TestAccountService(TestCase):
             content_type="test/html"
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-    
+
     def test_delete_account(self):
         """Delete: It should Delete an Account"""
         account = self._create_accounts(1)[0]
@@ -255,12 +255,4 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Check for the CORS header
         self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
-
-
-    
-    
-
-
-
-
-
+        
